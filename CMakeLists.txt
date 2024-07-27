@@ -11,8 +11,18 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_compile_options(-Wall -Wconversion -Wextra -pedantic)
 
-add_executable(demo demo.cpp)
-target_link_libraries(demo iir)
 
-add_executable(test_fir test_fir.cpp)
+include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${PROJECT_SOURCE_DIR}/libs)
 
+find_package(iir)
+
+file(GLOB_RECURSE SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
+
+#add_executable(main ${SOURCES})
+#target_link_libraries(main iir::iir)
+
+add_executable(demo src/demo.cpp)
+target_link_libraries(demo iir::iir)
+
+add_subdirectory(tests)

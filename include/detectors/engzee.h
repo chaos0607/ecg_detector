@@ -22,6 +22,7 @@
 #include <deque>
 #include <algorithm>
 #include <numeric>
+#include <iostream>
 
 struct Fir {
 	void init(const std::vector<float> _coefficients) {
@@ -123,6 +124,14 @@ class Engzee {
         MM.init(5);
     }
 
+    void printRPeaks() {
+    std::cout << "R peaks: ";
+    for (int rpeak : rpeaks) {
+        std::cout << rpeak << " ";
+    }
+    std::cout << std::endl;
+}
+
     void detect(float v) {
         const float filtered = lowhighpass.filter(v);
         past.push(filtered);
@@ -199,6 +208,17 @@ class Engzee {
             }
             if (!firstDetection) {
                 float dSamples = (float)(lastRelativeQRStimestamp - index);
+                //printf("lastRelativeQRStimestamp = %d\n",lastRelativeQRStimestamp);
+                //printf("index = %d\n",index);
+            if (!rpeaks.empty()) {
+            // 计算新的R峰值
+            int newRPeak = rpeaks.back() + lastRelativeQRStimestamp;
+            // 将新的R峰值加入到数组中
+            rpeaks.push_back(newRPeak);
+            } else {
+            // 如果rpeaks为空，可以直接添加lastRelativeQRStimestamp或根据需要进行初始化
+            rpeaks.push_back(lastRelativeQRStimestamp);
+            }
                 lastRelativeQRStimestamp = index;
                 float hr = 60*fs / dSamples;
                 hrcallback.hasHR(hr);
@@ -211,6 +231,7 @@ class Engzee {
 
         lastThresQRStimestamp++;
         lastRelativeQRStimestamp++;
+        printf("lastRelativeQRStimestamp = %d\n",lastRelativeQRStimestamp);
     }
 
     private:
@@ -219,6 +240,7 @@ class Engzee {
     Fir MM;
     Fir past;
 
+    std::vector<int> rpeaks;
     int ms200;
     int ms1200;
     int ms160;

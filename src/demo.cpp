@@ -1,4 +1,4 @@
-#include "engzee.h"
+#include "detectors/engzee.h"
 
 #include <stdio.h>
 #include "Iir.h"
@@ -39,6 +39,7 @@ int main (int,char**)
 		const float a = iirnotch.filter(a1);
 		engzee.detect(a);
 	}
+	engzee.printRPeaks();
 	fclose(finput);
 
 	fclose(f);
