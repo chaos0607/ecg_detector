@@ -6,3 +6,6 @@ foreach(test_source ${TEST_SOURCES})
   add_executable(${test_name} ${test_source})
   target_link_libraries(${test_name} iir::iir)
 endforeach()
+
+
+target_sources(nwa_test PRIVATE ../src/detectors/common.cpp)
