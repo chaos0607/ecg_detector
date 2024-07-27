@@ -15,7 +15,7 @@ int main (int,char**)
 	Iir::Butterworth::LowPass<4> lp;
 	lp.setup(fs,ecg_max_f);
 
-	FILE *finput = fopen("example_data/ECG.tsv","rt");
+	FILE *finput = fopen("../example_data/ECG.tsv","rt");
 	FILE *foutput = fopen("ecg_filtered.dat","wt");
 	// let's simulate incoming streaming data
 	for(;;) 

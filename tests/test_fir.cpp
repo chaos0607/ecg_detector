@@ -54,7 +54,7 @@ int main() {
 	iirnotch.setup(fs,mains,2);
 
 
-	FILE *finput = fopen("example_data/ECG.tsv","rt");
+	FILE *finput = fopen("../example_data/ECG.tsv","rt");
 
 	std::ofstream outfile("filtered_ecg_full_c++.txt");
 

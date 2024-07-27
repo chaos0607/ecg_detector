@@ -5,6 +5,8 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set(CMAKE_BUILD_TYPE "RelWithDebInfo")
 endif()
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/output)
+
 include(GNUInstallDirs)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -22,7 +24,7 @@ file(GLOB_RECURSE SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 #add_executable(main ${SOURCES})
 #target_link_libraries(main iir::iir)
 
-add_executable(demo src/demo.cpp)
+add_executable(demo src/demo.cpp src/utils.cpp)
 target_link_libraries(demo iir::iir)
 
 add_subdirectory(tests)

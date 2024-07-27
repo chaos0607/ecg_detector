@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include "Iir.h"
+#include "utils.h"
 
 struct MyCallback : HRCallback {
 	FILE* f;
@@ -31,7 +32,7 @@ int main (int,char**)
 
 	Engzee engzee(fs,callback);
 
-	FILE *finput = fopen("example_data/ECG.tsv","rt");
+	FILE *finput = fopen("../example_data/ECG.tsv","rt");
 	for(;;) 
 	{
 		float a1,a2,a3,a4,a5,a6;
@@ -39,7 +40,7 @@ int main (int,char**)
 		const float a = iirnotch.filter(a1);
 		engzee.detect(a);
 	}
-	engzee.printRPeaks();
+	saveReaksToFile(engzee.rpeaks,"rpeaks.dat");
 	fclose(finput);
 
 	fclose(f);
