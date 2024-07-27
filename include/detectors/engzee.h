@@ -23,80 +23,8 @@
 #include <algorithm>
 #include <numeric>
 #include <iostream>
-
-struct Fir {
-	void init(const std::vector<float> _coefficients) {
-		coefficients = _coefficients;
-		buffer = std::deque<float>();
-		buffer.resize(coefficients.size());
-	}
-
-    void init(const int length) {
-        buffer = std::deque<float>();
-        buffer.resize(length);
-        coefficients = std::vector<float>();
-        coefficients.resize(length);
-    }
-
-    inline void push(const float input) {
-        buffer.push_front(input);
-        buffer.pop_back();
-    }
-
-	inline float filter(const float input) {
-        push(input);
-        float output = 0.0f;
-        auto itcoeff = coefficients.begin();
-        auto itbuffer = buffer.begin();
-        for(unsigned i = 0; i < buffer.size(); i++) {
-            output += *(itcoeff++) * *(itbuffer++);
-        }
-        return output;
-	}
-
-    inline float max(const int timesteps = -1) const {
-        int endpoint;
-        if ( (timesteps < 0) || (timesteps > (int)buffer.size() ) ) {
-            endpoint = (int)buffer.size();
-        } else {
-            endpoint = timesteps;
-        }
-        float max = 0;
-        for (int i = 0; i < endpoint; i++) {
-            if (buffer[i] > max) {
-                max = buffer[i];
-            }
-        }
-        return max;
-    }
-
-    inline float average() const {
-        float a = 0.0;
-        for(auto &v:buffer) {
-            a += v;
-        }
-        return a / (float)(buffer.size());
-    }
-
-	std::vector<float> coefficients;
-	std::deque<float> buffer;
-};
-
-/**
- * @brief Heartrate detector callback interface
- * This interface establishes the communication between
- * the main program and the detector. The main program
- * needs to create an instance of this interface
- * and register it with the Engzee class.
- */
-struct HRCallback {
-    /**
-     * @brief Callback which is called whenever the heartrate has been determined
-     * 
-     * @param hr The heartrate in beats per minute.
-     */
-    virtual void hasHR(float hr) = 0;
-};
+#include "fir.h"
+#include "callback.h" 
 
 /**
  * @brief The EngZee heartrate detector class
@@ -203,9 +131,9 @@ class Engzee {
             if (!firstDetection) {
                 float dSamples = (float)(lastRelativeQRStimestamp - index);
                 
-                current = current + lastRelativeQRStimestamp - index; //need to check why result is always plus 1 as the original python result
-                rpeaks.push_back(current);
-                printf("last_rpeak = %d\n",current);
+                current_rpeak = current_rpeak + lastRelativeQRStimestamp - index; //need to check why result is always plus 1 as the original python result
+                rpeaks.push_back(current_rpeak);
+                printf("current_rpeak = %d\n",current_rpeak);
 
                 lastRelativeQRStimestamp = index;
                 float hr = 60*fs / dSamples;
@@ -227,7 +155,7 @@ class Engzee {
     Fir MM;
     Fir past;
 
-    u_int current = 0;
+    int current_rpeak = 0;
     int ms200;
     int ms1200;
     int ms160;

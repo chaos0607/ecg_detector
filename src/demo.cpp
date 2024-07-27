@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "Iir.h"
 #include "utils.h"
+#include "callback.h" 
 
 struct MyCallback : HRCallback {
 	FILE* f;
