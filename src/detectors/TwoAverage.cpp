@@ -11,6 +11,25 @@
 TwoAverageDetector::TwoAverageDetector(double fs) : fs(fs) {
 }
 
+//use Forward and Reverse Filtering to decrease the Phase Delay of the signal
+void decreaseDelayReverseFiltering(std::vector<double>& signal, Iir::Butterworth::BandPass<2>& filter) {
+    std::reverse(signal.begin(), signal.end());
+    for (size_t i = 0; i < signal.size(); ++i) {
+        signal[i] = filter.filter(signal[i]);
+    }
+    std::reverse(signal.begin(), signal.end());
+}
+
+void decreaseDelayAddCompensation(std::vector<double>& signal, int delaySamples) {
+    if (delaySamples < 0 || delaySamples >= signal.size()) {
+        std::cerr << "Invalid delaySamples value." << std::endl;
+        return;
+    }
+    std::rotate(signal.begin(), signal.begin() + delaySamples, signal.end());
+    std::fill(signal.begin(), signal.begin() + delaySamples, signal[delaySamples]);
+}
+
+
 std::vector<int> TwoAverageDetector::detect(const std::vector<double>& unfiltered_ecg) {
 
     Iir::Butterworth::BandPass<2> iirbandpass ;
@@ -25,12 +44,8 @@ std::vector<int> TwoAverageDetector::detect(const std::vector<double>& unfiltere
 
 
     // use to decrease the Phase Delay of the signal
-    std::reverse(filtered_ecg.begin(), filtered_ecg.end());
-    for (size_t i = 0; i < filtered_ecg.size(); ++i) {
-        filtered_ecg[i] = iirbandpass.filter(filtered_ecg[i]);
-    }
-    std::reverse(filtered_ecg.begin(), filtered_ecg.end());
-
+    //decreaseDelayReverseFiltering(filtered_ecg, iirbandpass);
+    decreaseDelayAddCompensation(filtered_ecg, 16);
     //saveEcgDataToFile(filtered_ecg, "filtered_ecg.txt");
 
     std::vector<double> abs_filtered_ecg(filtered_ecg.size());
@@ -66,11 +81,11 @@ std::vector<int> TwoAverageDetector::detect(const std::vector<double>& unfiltere
                 int detection = std::distance(filtered_ecg.begin(), std::max_element(filtered_ecg.begin() + start, filtered_ecg.begin() + end + 1));
                 if (!QRS.empty()) {
                     if (detection - QRS.back() > static_cast<int>(0.3 * fs)) {
-                        std::cout << "QRS detected at index: " << detection << std::endl;
+                        //std::cout << "QRS detected at index: " << detection << std::endl;
                         QRS.push_back(detection);
                     }
                 } else {
-                    std::cout << "QRS detected at index: " << detection << std::endl;
+                    //std::cout << "QRS detected at index: " << detection << std::endl;
                     QRS.push_back(detection);
                 }
             }
