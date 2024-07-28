@@ -17,3 +17,41 @@ void saveReaksToFile(const std::vector<u_int>& rpeaks, const std::string& filena
 
     outFile.close();
 }
+
+void saveEcgDataToFile(const std::vector<double>& data, const std::string& filename) {
+    std::ofstream outFile(filename);
+    if (!outFile) {
+        std::cerr << "fail to open file: " << filename << std::endl;
+        return;
+    }
+
+    for (const auto& value : data) {
+        outFile << value << "\n";
+    }
+
+    outFile.close();
+    if (!outFile) {
+        std::cerr << "fail to close file: " << filename << std::endl;
+    }
+}
+
+std::vector<double> loadEcgDataFromFile(const std::string& filename) {
+    std::vector<double> data;
+    std::ifstream inFile(filename);
+    if (!inFile) {
+        std::cerr << "fail to open file: " << filename << std::endl;
+        return data;
+    }
+
+    double value;
+    while (inFile >> value) {
+        data.push_back(value);
+    }
+
+    inFile.close();
+    if (!inFile) {
+        std::cerr << "fail to close file: " << filename << std::endl;
+    }
+
+    return data;
+}
