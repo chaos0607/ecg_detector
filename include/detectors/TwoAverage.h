@@ -2,16 +2,12 @@
 #define TWOAVERAGEDETECTOR_H
 
 #include <vector>
-#include <string>
-#
+#include "base.h"
 
-class TwoAverageDetector {
+class TwoAverageDetector : public BaseDetector {
 public:
-    TwoAverageDetector(double fs);
-    std::vector<int> detect(const std::vector<double>& unfiltered_ecg);
-
-private:
-    double fs;
+    TwoAverageDetector(double fs) : BaseDetector(fs) {}
+    std::vector<int> detect(const std::vector<double>& unfiltered_ecg) override;
 };
 
 #endif // TWOAVERAGEDETECTOR_H

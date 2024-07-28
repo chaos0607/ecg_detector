@@ -5,11 +5,8 @@
 #include <functional>
 #include "iir/Butterworth.h"
 #include "detectors/TwoAverage.h"
-#include "detectors/common.h"
+#include "algorithms/mwa.h"
 #include <fstream>  
-
-TwoAverageDetector::TwoAverageDetector(double fs) : fs(fs) {
-}
 
 //use Forward and Reverse Filtering to decrease the Phase Delay of the signal
 void decreaseDelayReverseFiltering(std::vector<double>& signal, Iir::Butterworth::BandPass<2>& filter) {
@@ -21,7 +18,7 @@ void decreaseDelayReverseFiltering(std::vector<double>& signal, Iir::Butterworth
 }
 
 void decreaseDelayAddCompensation(std::vector<double>& signal, int delaySamples) {
-    if (delaySamples < 0 || delaySamples >= signal.size()) {
+    if (delaySamples < 0 || delaySamples >= static_cast<int>(signal.size())) {
         std::cerr << "Invalid delaySamples value." << std::endl;
         return;
     }
@@ -53,10 +50,10 @@ std::vector<int> TwoAverageDetector::detect(const std::vector<double>& unfiltere
         return std::abs(val);
     });
 
-    int window1 = static_cast<int>(0.12 * fs);
+    size_t window1 = static_cast<size_t>(0.12 * fs);
     std::vector<double> mwa_qrs = MWA_cumulative(abs_filtered_ecg, window1);
 
-    int window2 = static_cast<int>(0.6 * fs);
+    size_t window2 = static_cast<size_t>(0.6 * fs);
     std::vector<double> mwa_beat = MWA_cumulative(abs_filtered_ecg, window2);
 
     std::vector<double> blocks(unfiltered_ecg.size(), 0.0);
@@ -72,13 +69,13 @@ std::vector<int> TwoAverageDetector::detect(const std::vector<double>& unfiltere
     std::vector<int> QRS;
     int start = 0, end = 0;
 
-    for (size_t i = 1; i < blocks.size(); ++i) { 
+    for (int i = 1; i < static_cast<int>(blocks.size()); ++i) { 
         if (blocks[i - 1] == 0.0 && blocks[i] == block_height) {  
             start = i;
         } else if (blocks[i - 1] == block_height && blocks[i] == 0.0) {
             end = i - 1;
             if (end - start > static_cast<int>(0.08 * fs)) {
-                int detection = std::distance(filtered_ecg.begin(), std::max_element(filtered_ecg.begin() + start, filtered_ecg.begin() + end + 1));
+                int detection = static_cast<int>(std::distance(filtered_ecg.begin(), std::max_element(filtered_ecg.begin() + start, filtered_ecg.begin() + end + 1)));
                 if (!QRS.empty()) {
                     if (detection - QRS.back() > static_cast<int>(0.3 * fs)) {
                         //std::cout << "QRS detected at index: " << detection << std::endl;

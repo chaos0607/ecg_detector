@@ -6,10 +6,7 @@
 #include <functional>
 #include "iir/Butterworth.h"
 #include "detectors/wqrs.h"
-#include "detectors/common.h"
-
-wqrsDetector::wqrsDetector(double fs) : fs(fs) {
-}
+#include "algorithms/mwa.h"
 
 std::vector<double> wqrsDetector::lengthTransform(const std::vector<double>& x, int w, double fs) {
     std::vector<double> tmp;
@@ -28,8 +25,8 @@ std::vector<double> wqrsDetector::lengthTransform(const std::vector<double>& x, 
 
 std::vector<int> wqrsDetector::threshold(const std::vector<double>& x, double fs) {
     std::vector<int> peaks;
-    std::vector<double> u = MWA_convolve(x, 10 * fs);
-    for (size_t i = 0; i < x.size(); ++i) {
+    std::vector<double> u = MWA_convolve(x, static_cast<size_t>(10 * fs));
+    for (int i = 0; i < static_cast<int>(x.size()); ++i) {
         if ((peaks.empty() || i > peaks.back() + static_cast<int>(fs * 0.35)) && x[i] > u[i]) {
             peaks.push_back(i);
         }

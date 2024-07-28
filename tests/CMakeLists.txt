@@ -8,6 +8,6 @@ foreach(test_source ${TEST_SOURCES})
 endforeach()
 
 
-target_sources(mwa_test PRIVATE ../src/detectors/common.cpp)
-target_sources(twoaverage_test PRIVATE ../src/detectors/common.cpp ../src/detectors/TwoAverage.cpp)
-target_sources(wqrs_test PRIVATE ../src/detectors/common.cpp ../src/detectors/wqrs.cpp)
+target_sources(mwa_test PRIVATE ../src/algorithms/mwa.cpp)
+target_sources(twoaverage_test PRIVATE ../src/algorithms/mwa.cpp ../src/detectors/TwoAverage.cpp)
+target_sources(wqrs_test PRIVATE ../src/algorithms/mwa.cpp ../src/detectors/wqrs.cpp)

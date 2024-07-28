@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <numeric>
-#include "detectors/common.h"
+#include "algorithms/mwa.h"
 #include <fstream>
 #include <iomanip> 
 #include <algorithm>
@@ -21,7 +21,7 @@ int main() {
     }
 
 
-    int window_size = 0.12*250;
+    size_t window_size = static_cast<size_t>(0.12*250);
 
     std::vector<double> abs_input_array(input_array.size());
     std::transform(input_array.begin(), input_array.end(), abs_input_array.begin(), [](double val) {

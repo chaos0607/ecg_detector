@@ -23,7 +23,7 @@
 #include <algorithm>
 #include <numeric>
 #include <iostream>
-#include "fir.h"
+#include "algorithms/fir.h"
 #include "callback.h" 
 
 /**
