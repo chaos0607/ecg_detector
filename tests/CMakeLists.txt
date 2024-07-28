@@ -8,4 +8,4 @@ foreach(test_source ${TEST_SOURCES})
 endforeach()
 
 
-target_sources(nwa_test PRIVATE ../src/detectors/common.cpp)
+target_sources(mwa_test PRIVATE ../src/detectors/common.cpp)

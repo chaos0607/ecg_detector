@@ -7,7 +7,7 @@ std::vector<double> MWA_cumulative(const std::vector<double>& input_array, int w
     std::vector<double> ret(input_array.size(), 0.0);
     std::partial_sum(input_array.begin(), input_array.end(), ret.begin());
 
-    for (size_t i = window_size; i < ret.size(); ++i) {
+    for (size_t i = ret.size(); i-- > window_size;) {
         ret[i] = ret[i] - ret[i - window_size];
     }
 
