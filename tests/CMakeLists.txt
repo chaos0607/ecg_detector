@@ -10,3 +10,4 @@ endforeach()
 
 target_sources(mwa_test PRIVATE ../src/detectors/common.cpp)
 target_sources(twoaverage_test PRIVATE ../src/detectors/common.cpp ../src/detectors/TwoAverage.cpp)
+target_sources(wqrs_test PRIVATE ../src/detectors/common.cpp ../src/detectors/wqrs.cpp)

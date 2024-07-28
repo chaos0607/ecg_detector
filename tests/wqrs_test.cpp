@@ -1,4 +1,4 @@
-#include "detectors/TwoAverage.h"
+#include "detectors/wqrs.h"
 #include <iostream>
 
 int main() {
@@ -14,7 +14,7 @@ int main() {
 	}
     const float fs = 250;
 
-    TwoAverageDetector detector(fs);
+    wqrsDetector detector(fs);
     std::vector<int> qrs = detector.detect(unfiltered_ecg);
 
     std::cout << "QRS detected at index:";
