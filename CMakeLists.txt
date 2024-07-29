@@ -21,10 +21,7 @@ find_package(iir)
 
 file(GLOB_RECURSE SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
-#add_executable(main ${SOURCES})
-#target_link_libraries(main iir::iir)
-
-add_executable(demo src/demo.cpp src/utils.cpp)
-target_link_libraries(demo iir::iir)
+add_executable(EcgDetector ${SOURCES})
+target_link_libraries(EcgDetector iir::iir)
 
 add_subdirectory(tests)
