@@ -12,6 +12,7 @@ std::vector<int> EcgDetector::offlinedetect(const std::vector<double>& unfiltere
     }
 
     std::vector<int> rpeaks =  detector->detect(unfiltered_ecg);
+    return rpeaks;
 }
 
 std::vector<int> EcgDetector::offlinedetectFromFile(const std::string& filename, int detector_type, double fs) {
@@ -28,9 +29,5 @@ std::vector<int> EcgDetector::offlinedetectFromFile(const std::string& filename,
     }
 
     std::vector<int> rpeaks = offlinedetect(unfiltered_ecg, detector_type, fs);
-
-    finput.close();
-    if (!finput) {
-        std::cerr << "fail to close file: " << filename << std::endl;
-    }
+    return rpeaks;
 }

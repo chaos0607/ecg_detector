@@ -30,9 +30,6 @@ void saveEcgDataToFile(const std::vector<double>& data, const std::string& filen
     }
 
     outFile.close();
-    if (!outFile) {
-        std::cerr << "fail to close file: " << filename << std::endl;
-    }
 }
 
 std::vector<double> loadEcgDataFromFile(const std::string& filename) {
@@ -49,9 +46,5 @@ std::vector<double> loadEcgDataFromFile(const std::string& filename) {
     }
 
     inFile.close();
-    if (!inFile) {
-        std::cerr << "fail to close file: " << filename << std::endl;
-    }
-
     return data;
 }
