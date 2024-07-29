@@ -1,24 +1,23 @@
 #include <iostream>
-#include <fstream>
-#include <string>
 #include <vector>
+#include <fstream>
+#include "EcgDetector.h"
 #include "DetectorFactory.h"
 
-int main(int argc, char *argv[]) {
-    if (argc < 4) {
-        std::cerr << "Usage: " << argv[0] << " <sample file> <detector type> <sample frequency>" << std::endl;
-        std::cerr << "detector type: 0 for TwoAverage, 1 for Wqrs" << std::endl;
-        return EXIT_FAILURE;
+
+std::vector<int> EcgDetector::offlinedetect(const std::vector<double>& unfiltered_ecg, int detector_type, double fs) {
+    auto detector = DetectorFactory::createDetector(detector_type, fs);
+    if (!detector) {
+        throw std::invalid_argument("Invalid detector type: " + std::to_string(detector_type));
     }
 
-    const std::string input_file = argv[1];
-    const int detector_type = std::stoi(argv[2]);
-    const double fs = std::stod(argv[3]);
+    std::vector<int> rpeaks =  detector->detect(unfiltered_ecg);
+}
 
-    std::ifstream finput(input_file);
+std::vector<int> EcgDetector::offlinedetectFromFile(const std::string& filename, int detector_type, double fs) {
+    std::ifstream finput(filename);
     if (!finput.is_open()) {
-        std::cerr << "Error opening file: " << input_file << std::endl;
-        return EXIT_FAILURE;
+        throw std::invalid_argument("fail to open file: " + filename);
     }
 
     std::vector<double> unfiltered_ecg;
@@ -28,19 +27,10 @@ int main(int argc, char *argv[]) {
         unfiltered_ecg.push_back(cs_V2_V1);
     }
 
-    auto detector = DetectorFactory::createDetector(detector_type, fs);
-    if (!detector) {
-        std::cerr << "Invalid detector type: " << detector_type << std::endl;
-        return EXIT_FAILURE;
-    }
+    std::vector<int> rpeaks = offlinedetect(unfiltered_ecg, detector_type, fs);
 
-    std::vector<int> rpeaks =  detector->detect(unfiltered_ecg);
-    std::cout << "QRS detected at index:";
-    for (int index : rpeaks) {
-        std::cout << " " << index;
-    }
-    std::cout << std::endl;
-    
     finput.close();
-    return EXIT_SUCCESS;
+    if (!finput) {
+        std::cerr << "fail to close file: " << filename << std::endl;
+    }
 }
