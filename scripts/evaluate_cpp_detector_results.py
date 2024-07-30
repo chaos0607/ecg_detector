@@ -117,9 +117,9 @@ def evaluate_detector(detector):
                 # but centres the detection point for finding the nearest annotated match
                 # It may/will be different for different subjects and experiments
                 if detectorname == "two_average_detector":
-                    rpeaks_file = "rpeaks_wqrs.tsv"
+                    rpeaks_file = "rpeaks_twoaveragerpeaks_wqrs.tsv"
                 elif detectorname == "wqrs_detector":
-                    rpeaks_file = "rpeaks_twoaverage.tsv"
+                    rpeaks_file = "rpeaks_wqrs.tsv"
 
                 rpeaks_dir = "/home/cc/work/project/code/my-ecg-detector-test-data/experiment_data"
                 file_path= rpeaks_dir + "/" + ("subject_%02d" % subject_number) + "/"  + experiment + "/"+ rpeaks_file
