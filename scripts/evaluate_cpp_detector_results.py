@@ -160,7 +160,7 @@ def evaluate_detector(detector):
 def main():
         evaluate_detector(detectors.detector_list[0])
         evaluate_detector(detectors.detector_list[7])
-        evaluate_detector(detectors.detector_list[3])
+        #valuate_detector(detectors.detector_list[3])
 
 
 

@@ -15,8 +15,6 @@ public:
                 return std::make_unique<TwoAverageDetector>(fs);
             case 1:
                 return std::make_unique<wqrsDetector>(fs);
-            case 2:
-                return std::make_unique<EngzeeDetector>(fs);
             default:
                 std::cerr << "Error: Unknown detector type!" << std::endl;
                 std::exit(EXIT_FAILURE);
