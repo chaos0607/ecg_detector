@@ -1,17 +1,24 @@
 #include "detectors/wqrs.h"
 #include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
 
 int main() {
 
     std::vector<double> unfiltered_ecg;
+    std::string filename = std::string(PROJECT_ROOT) + "/example_data/ECG.tsv";
 
-	FILE *finput = fopen("../example_data/ECG.tsv","rt");
-	for(;;) 
-	{
-		float a1,a2,a3,a4,a5,a6;
-		if (fscanf(finput,"%f %f %f %f %f %f\n",&a1,&a2,&a3,&a4,&a5,&a6)<1) break;
-        unfiltered_ecg.push_back(a1);
-	}
+    std::ifstream finput(filename);
+    if (!finput.is_open()) {
+        std::cerr << "Error: fail to open file: " << filename << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
+    double cs_V2_V1, einthoven_II, einthoven_III, acc_x, acc_y, acc_z;
+
+    while (finput >> cs_V2_V1 >> einthoven_II >> einthoven_III >> acc_x >> acc_y >> acc_z) {
+        unfiltered_ecg.push_back(cs_V2_V1);
+    }
     const float fs = 250;
 
     wqrsDetector detector(fs);

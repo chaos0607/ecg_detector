@@ -30,7 +30,7 @@ void decreaseDelayAddCompensation(std::vector<double>& signal, int delaySamples)
 std::vector<int> TwoAverageDetector::OfflineDetect(const std::vector<double>& unfiltered_ecg) {
 
     Iir::Butterworth::BandPass<2> iirbandpass;
-	iirbandpass.setup(fs, 14, 6);
+	iirbandpass.setup(samplingFrequency, 14, 6);
 
     std::vector<double> filtered_ecg;
     filtered_ecg.reserve(unfiltered_ecg.size());
@@ -50,10 +50,10 @@ std::vector<int> TwoAverageDetector::OfflineDetect(const std::vector<double>& un
         return std::abs(val);
     });
 
-    size_t window1 = static_cast<size_t>(0.12 * fs);
+    size_t window1 = static_cast<size_t>(0.12 * samplingFrequency);
     std::vector<double> mwa_qrs = MWA_cumulative(abs_filtered_ecg, window1);
 
-    size_t window2 = static_cast<size_t>(0.6 * fs);
+    size_t window2 = static_cast<size_t>(0.6 * samplingFrequency);
     std::vector<double> mwa_beat = MWA_cumulative(abs_filtered_ecg, window2);
 
     std::vector<double> blocks(unfiltered_ecg.size(), 0.0);
@@ -74,10 +74,10 @@ std::vector<int> TwoAverageDetector::OfflineDetect(const std::vector<double>& un
             start = i;
         } else if (blocks[i - 1] == block_height && blocks[i] == 0.0) {
             end = i - 1;
-            if (end - start > static_cast<int>(0.08 * fs)) {
+            if (end - start > static_cast<int>(0.08 * samplingFrequency)) {
                 int detection = static_cast<int>(std::distance(filtered_ecg.begin(), std::max_element(filtered_ecg.begin() + start, filtered_ecg.begin() + end + 1)));
                 if (!QRS.empty()) {
-                    if (detection - QRS.back() > static_cast<int>(0.3 * fs)) {
+                    if (detection - QRS.back() > static_cast<int>(0.3 * samplingFrequency)) {
                         //std::cout << "QRS detected at index: " << detection << std::endl;
                         QRS.push_back(detection);
                     }

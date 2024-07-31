@@ -26,23 +26,25 @@ int main() {
 	iirnotch.setup(fs,mains,2);
 
 
-	FILE *finput = fopen("../example_data/ECG.tsv","rt");
 
+	std::vector<double> unfiltered_ecg;
+    std::string filename = std::string(PROJECT_ROOT) + "/example_data/ECG.tsv";
+
+    std::ifstream finput(filename);
 	std::ofstream outfile("filtered_ecg_full_c++.txt");
 
-	if (!outfile.is_open()) {
-		std::cerr << "fail to open outfile" << std::endl;
-		return 1;
-	}
+    if (!finput.is_open()) {
+        std::cerr << "Error: fail to open file: " << filename << std::endl;
+        std::exit(EXIT_FAILURE);
+    }
 
-	for(;;) 
-	{
-		float a1,a2,a3,a4,a5,a6;
-		if (fscanf(finput,"%f %f %f %f %f %f\n",&a1,&a2,&a3,&a4,&a5,&a6)<1) break;
-		std::cout << a1 << std::endl;
-		const float a = iirnotch.filter(a1);
+    double cs_V2_V1, einthoven_II, einthoven_III, acc_x, acc_y, acc_z;
+    while (finput >> cs_V2_V1 >> einthoven_II >> einthoven_III >> acc_x >> acc_y >> acc_z) {
+        unfiltered_ecg.push_back(cs_V2_V1);
+		std::cout << cs_V2_V1 << std::endl;
+		double a = iirnotch.filter(cs_V2_V1);
 		std::cout << a << std::endl;
 		outfile << a << std::endl;
-	}
+    }
 }
 

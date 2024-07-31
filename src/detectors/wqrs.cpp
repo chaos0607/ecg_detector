@@ -37,7 +37,7 @@ std::vector<int> wqrsDetector::threshold(const std::vector<double>& x, double fs
 std::vector<int> wqrsDetector::OfflineDetect(const std::vector<double>& unfiltered_ecg) {
     
     Iir::Butterworth::LowPass<2> iirlowpass ;
-	iirlowpass.setup(fs, 15);
+	iirlowpass.setup(samplingFrequency, 15);
 
     std::vector<double> filtered_ecg;
     filtered_ecg.reserve(unfiltered_ecg.size());
@@ -46,6 +46,6 @@ std::vector<int> wqrsDetector::OfflineDetect(const std::vector<double>& unfilter
         filtered_ecg.push_back(iirlowpass.filter(sample));
     }
 
-    filtered_ecg = lengthTransform(filtered_ecg, static_cast<int>(std::ceil(fs * 0.13)), fs);
-    return threshold(filtered_ecg, fs);
+    filtered_ecg = lengthTransform(filtered_ecg, static_cast<int>(std::ceil(samplingFrequency * 0.13)), samplingFrequency);
+    return threshold(filtered_ecg, samplingFrequency);
 }

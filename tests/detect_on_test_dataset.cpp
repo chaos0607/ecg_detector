@@ -49,9 +49,9 @@ int main(int argc, char *argv[]) {
     const std::string input_file = argv[1];
     const double fs = std::stod(argv[2]);
 
-    std::string directoryPath = "/home/cc/work/project/code/dataset/experiment_data"; // 指定你的目录路径
+    std::string directoryPath = input_file;
     processECGFilesInDirectory(directoryPath,0,fs); // 0 for TwoAverage
     processECGFilesInDirectory(directoryPath,1,fs); // 1 for Wqrs
-    processECGFilesInDirectory(directoryPath,2,fs); // 2 for engzee
+    //processECGFilesInDirectory(directoryPath,2,fs); // 2 for engzee
     return 0;
 }

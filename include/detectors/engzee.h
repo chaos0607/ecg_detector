@@ -33,7 +33,7 @@ public:
      * 
      * @param samplingrate The sampling rate in Hz in the region of 250Hz..300Hz.
      */
-    EngzeeDetector(double fs);
+    EngzeeDetector(double samplingFrequency);
     
     std::vector<int> OfflineDetect(const std::vector<double>& unfiltered_ecg) override;
 

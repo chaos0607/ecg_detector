@@ -6,7 +6,7 @@
 
 class TwoAverageDetector : public BaseDetector {
 public:
-    TwoAverageDetector(double fs) : BaseDetector(fs) {}
+    TwoAverageDetector(double samplingFrequency) : BaseDetector(samplingFrequency) {}
     std::vector<int> OfflineDetect(const std::vector<double>& unfiltered_ecg) override;
 };
 

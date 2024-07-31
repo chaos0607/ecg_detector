@@ -10,16 +10,20 @@ int main() {
 
     
 
+
     std::vector<double> input_array;
+    std::string filename = std::string(PROJECT_ROOT) + "/example_data/ECG.tsv";
 
-    FILE *finput = fopen("../example_data/ECG.tsv","rt");
-    for(;;) 
-    {
-        float a1,a2,a3,a4,a5,a6;
-        if (fscanf(finput,"%f %f %f %f %f %f\n",&a1,&a2,&a3,&a4,&a5,&a6)<1) break;
-        input_array.push_back(a1);
+    std::ifstream finput(filename);
+    if (!finput.is_open()) {
+        std::cerr << "Error: fail to open file: " << filename << std::endl;
+        std::exit(EXIT_FAILURE);
     }
+    double cs_V2_V1, einthoven_II, einthoven_III, acc_x, acc_y, acc_z;
 
+    while (finput >> cs_V2_V1 >> einthoven_II >> einthoven_III >> acc_x >> acc_y >> acc_z) {
+        input_array.push_back(cs_V2_V1);
+    }
 
     size_t window_size = static_cast<size_t>(0.12*250);
 
@@ -41,7 +45,6 @@ int main() {
     }
     file_cumulative.close();
 
-    // 保存 result_original 到文件
     std::ofstream file_original("result_original.txt");
     file_original << std::fixed << std::setprecision(6);
     for (const auto& value : result_original) {
@@ -49,7 +52,6 @@ int main() {
     }
     file_original.close();
 
-    // 保存 result_convolve 到文件
     std::ofstream file_convolve("result_convolve.txt");
     file_convolve << std::fixed << std::setprecision(6);
     for (const auto& value : result_convolve) {

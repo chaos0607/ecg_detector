@@ -29,13 +29,13 @@
  * 
  * @param samplingrate The sampling rate in Hz in the region of 250Hz..300Hz.
  */
-    EngzeeDetector::EngzeeDetector(double fs) : BaseDetector(fs) {
-        ms200 = (int)(0.2 * fs);
-        ms1200 = (int)(1.2 * fs);
-        ms160 = (int)(0.16 * fs);
-        s2ctr = (int)(2 * fs);
-        neg_threshold = (int)(0.01 * fs);
-        past.init((int)(2 * fs));
+    EngzeeDetector::EngzeeDetector(double samplingFrequency) : BaseDetector(samplingFrequency) {
+        ms200 = (int)(0.2 * samplingFrequency);
+        ms1200 = (int)(1.2 * samplingFrequency);
+        ms160 = (int)(0.16 * samplingFrequency);
+        s2ctr = (int)(2 * samplingFrequency);
+        neg_threshold = (int)(0.01 * samplingFrequency);
+        past.init((int)(2 * samplingFrequency));
         lowhighpass.init({1, 4, 6, 4, 1, -1, -4, -6, -4, -1});
         MM.init(5);
         rpeaks.reserve(1000);
@@ -137,7 +137,7 @@
     std::vector<int> EngzeeDetector::OfflineDetect(const std::vector<double>& unfiltered_ecg) {
 
         Iir::Butterworth::BandStop<2> iirnotch;
-	    iirnotch.setup(fs,50,2);
+	    iirnotch.setup(samplingFrequency,50,2);
 
 
         for (auto v : unfiltered_ecg) {
