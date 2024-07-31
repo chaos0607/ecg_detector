@@ -16,6 +16,8 @@ from multiprocessing import Process
 import time
 # The JA analysis for a detector
 import jf_analysis
+import argparse
+
 
 # directory where the results are stored
 resultsdir = "results"
@@ -23,6 +25,12 @@ try:
     os.mkdir(resultsdir)
 except OSError as error:
     pass
+
+
+parser = argparse.ArgumentParser(description="Evaluate ECG detector results.")
+parser.add_argument('--rpeaks_dir', type=str, required=True, help='Path to the directory containing R-peak data.')
+args = parser.parse_args()
+rpeaks_dir = args.rpeaks_dir
 
 # Get the sampling rate
 fs = GUDb.fs
@@ -123,7 +131,10 @@ def evaluate_detector(detector):
                 elif detectorname == "engzee_detector":
                     rpeaks_file = "rpeaks_engzee.tsv"
 
-                rpeaks_dir = "/home/cc/work/project/code/my-ecg-detector-test-data/experiment_data"
+                if not os.path.isdir(rpeaks_dir):
+                    print(f"Error: {rpeaks_dir} is not a valid directory or is not accessible.")
+                    sys.exit(1)
+
                 file_path= rpeaks_dir + "/" + ("subject_%02d" % subject_number) + "/"  + experiment + "/"+ rpeaks_file
         
                 if exist==True: # only proceed if an annotation exists
