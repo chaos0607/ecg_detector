@@ -1,62 +1,114 @@
-# engzee_ecg_detector
+# ecg_detector
+C++ implementation of the following ECG r-peak detectors:
 
-C++ implementation of: W. Engelse and C. Zeelenberg, “A single scan algorithm for QRS detection and feature extraction”, IEEE Comp. in Cardiology, vol. 6, pp. 37-42, 1979 with modifications A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, “Real Time Electrocardiogram Segmentation for Finger Based ECG Biometrics”, BIOSIGNALS 2012, pp. 49-54, 2012.
+**Two-Avergae detector:**
+Elgendi, Mohamed & Jonkman, Mirjam & De Boer, Friso. (2010).Frequency Bands Effects on QRS Detection.The 3rd International Conference on Bio-inspired Systems and Signal Processing (BIOSIGNALS2010). 428-431.
+
+**WQRS detector:**
+W Zong, GB Moody, D Jiang  A Robust Open-source Algorithm to Detect Onset and Duration of QRS Complexes In: 2003 IEEE
+
+**Engzee detector:** (**unavailable at present, have some problems**)
+W. Engelse and C. Zeelenberg, “A single scan algorithm for QRS detection and feature extraction”, IEEE Comp. in Cardiology, vol. 6, pp. 37-42, 1979 with modifications A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, “Real Time Electrocardiogram Segmentation for Finger Based ECG Biometrics”, BIOSIGNALS 2012, pp. 49-54, 2012.
 
 Based on the Python version of the EngZee detector (https://github.com/berndporr/py-ecg-detectors) initially written by Luis Howell.
 
-## Usage
 
-The detector is header-only:
-```
-include "engzee.h"
-```
 
-Create a heartrate callback:
+## Build
 
-```
-struct MyCallback : HRCallback {
-        virtual void hasHR(float hr) {
-		// do something with the heartrate
-        }
-};
+#### Linux 
 
-```
+Run
 
-Create an instance of the callback and the detector:
-```
-MyCallback callback;
-Engzee engzee(fs,callback);
-```
-
-Call the detector sample by sample for example from an ADC
-callback:
-```
-engzee.detect(ecg);
-```
-where the `ecg`-samples should be in mV and the mains (50 or 60Hz) needs
-to be removed, for example with a butterworth filter.
-
-## Demo
-
-Install the IIR filter library (https://github.com/berndporr/iir1)
-which is used to remove the mains interference.
-
-Run:
 ```
 cmake .
-make
-./demo
 ```
-and it will print the heartrate from an example ECG and
-save it to `hr.dat` which can be plotted for example
-gnuplot or the script `plot_hr.py`.
+which generates the Makefile. Then run:
+```
+make
+```
 
-If you have the python detector installed then you can
-compare its output with that from this detector:
-`compare_cpp_and_python_detector.py`
+the output program will be  **output/EcgDetector**
 
-![alt tag](hrcomp.png)
+
+
+#### windows:
+
+Run
+
+```
+cmake -G "Visual Studio 16 2019" .
+```
+
+which generates the Makefile. Then run:
+
+```
+cmake --build . 
+```
+
+the output program will be  **output/Debug/EcgDetector**
+
+
+
+
+## Usage
+
+
+
+use the **EcgDetector** program
+
+```
+./EcgDetector <sample file> <detector type> <sample frequency>
+detector type: 0 for TwoAverage, 1 for Wqrs
+```
+
+for-example
+
+```
+$ output/EcgDetector ../example_data/ECG.tsv 0 250
+QRS detected at index: 112 310 503 698 ...
+```
+
+when need to handle lots of file at a time, can use tool:detect_on_test_dataset
+```
+output/detect_on_test_dataset $(dataset_dir)
+```
+the results will be stored same dir with original ECG.tsv
+
+
+
+## evaluate performance
+caution: in this test case we use the dataset_716 from University Of Glasgow ,if use any other datasets, please modify the evalute scripts to get access to new data
+the evaluate scripts are slightly modified from https://github.com/berndporr/JF-ECG-Benchmark
+
+1. use cpp program to get all detected r-peaks data 
+
+```
+output/detect_on_test_dataset $(dataset_dir)
+```
+2. use python scripts to compare detected r-peaks with annotated r-peaks data  
+
+```
+python scripts/evaluate_cpp_detector_results.py $(dataset_dir)
+```
+
+3. use python scripts to calculate and show the general JF-score
+
+```
+./scripts/jf_stats_detectors.py
+```
+![evaluate example](scripts/cpp_cs_v0.1.png)
+
+If you have the python detector installed then you can compare its the python version
+
+
+## Todo
+Add online detectors to process real tiem data steam
+
+fix the naf result of engzee detector under some circumstances
 
 # Credit
 
 Bernd Porr
+
+Charles Chen
