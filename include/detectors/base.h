@@ -8,7 +8,7 @@ public:
     BaseDetector(double fs) : fs(fs) {}
     virtual ~BaseDetector() = default;
 
-    virtual std::vector<int> detect(const std::vector<double>& unfiltered_ecg) = 0;
+    virtual std::vector<int> OfflineDetect(const std::vector<double>& unfiltered_ecg) = 0;
 
 protected:
     double fs;

@@ -16,6 +16,8 @@ void processECGFilesInDirectory(const std::string& directoryPath, int detectorTy
                 outputFilePath = entry.path().parent_path().string() + "/rpeaks_twoaverage.tsv";
             } else if (detectorType == 1) {
                 outputFilePath = entry.path().parent_path().string() + "/rpeaks_wqrs.tsv";
+            } else if (detectorType == 2) {
+                outputFilePath = entry.path().parent_path().string() + "/rpeaks_engzee.tsv";
             }
 
 
@@ -38,9 +40,18 @@ void processECGFilesInDirectory(const std::string& directoryPath, int detectorTy
     }
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+    if (argc < 3) {
+        std::cerr << "Usage: " << argv[0] << " <sample database path> <sample frequency>" << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    const std::string input_file = argv[1];
+    const double fs = std::stod(argv[2]);
+
     std::string directoryPath = "/home/cc/work/project/code/dataset/experiment_data"; // 指定你的目录路径
-    processECGFilesInDirectory(directoryPath,0,250);
-    processECGFilesInDirectory(directoryPath,1,250);
+    processECGFilesInDirectory(directoryPath,0,fs); // 0 for TwoAverage
+    processECGFilesInDirectory(directoryPath,1,fs); // 1 for Wqrs
+    processECGFilesInDirectory(directoryPath,2,fs); // 2 for engzee
     return 0;
 }

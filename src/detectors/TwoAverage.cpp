@@ -27,9 +27,9 @@ void decreaseDelayAddCompensation(std::vector<double>& signal, int delaySamples)
 }
 
 
-std::vector<int> TwoAverageDetector::detect(const std::vector<double>& unfiltered_ecg) {
+std::vector<int> TwoAverageDetector::OfflineDetect(const std::vector<double>& unfiltered_ecg) {
 
-    Iir::Butterworth::BandPass<2> iirbandpass ;
+    Iir::Butterworth::BandPass<2> iirbandpass;
 	iirbandpass.setup(fs, 14, 6);
 
     std::vector<double> filtered_ecg;

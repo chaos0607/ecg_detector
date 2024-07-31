@@ -11,14 +11,15 @@ std::vector<int> EcgDetector::offlinedetect(const std::vector<double>& unfiltere
         throw std::invalid_argument("Invalid detector type: " + std::to_string(detector_type));
     }
 
-    std::vector<int> rpeaks =  detector->detect(unfiltered_ecg);
+    std::vector<int> rpeaks =  detector->OfflineDetect(unfiltered_ecg);
     return rpeaks;
 }
 
 std::vector<int> EcgDetector::offlinedetectFromFile(const std::string& filename, int detector_type, double fs) {
     std::ifstream finput(filename);
     if (!finput.is_open()) {
-        throw std::invalid_argument("fail to open file: " + filename);
+        std::cerr << "Error: fail to open file: " << filename << std::endl;
+        std::exit(EXIT_FAILURE);
     }
 
     std::vector<double> unfiltered_ecg;

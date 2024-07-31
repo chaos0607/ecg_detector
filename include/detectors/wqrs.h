@@ -10,7 +10,7 @@ public:
 
     std::vector<double> lengthTransform(const std::vector<double>& x, int w, double fs);
     std::vector<int> threshold(const std::vector<double>& x, double fs);
-    std::vector<int> detect(const std::vector<double>& unfiltered_ecg) override;
+    std::vector<int> OfflineDetect(const std::vector<double>& unfiltered_ecg) override;
 };
 
 #endif // WQRS_H

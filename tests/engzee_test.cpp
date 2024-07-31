@@ -18,31 +18,25 @@ struct MyCallback : HRCallback {
 
 int main (int,char**)
 {
-	const float fs = 250;
-    const float mains = 50;
-	Iir::Butterworth::BandStop<2> iirnotch;
-	iirnotch.setup(fs,mains,2);
-
-	FILE* f = fopen("hr.dat","wt");
-	if (!f) {
-		fprintf(stderr,"Could not open hr.dat\n");
-		exit(1);
-	}
-
-	MyCallback callback(f);
-
-	Engzee engzee(fs,callback);
+    std::vector<double> unfiltered_ecg;
 
 	FILE *finput = fopen("../example_data/ECG.tsv","rt");
 	for(;;) 
 	{
 		float a1,a2,a3,a4,a5,a6;
 		if (fscanf(finput,"%f %f %f %f %f %f\n",&a1,&a2,&a3,&a4,&a5,&a6)<1) break;
-		const float a = iirnotch.filter(a1);
-		engzee.detect(a);
+        unfiltered_ecg.push_back(a1);
 	}
-	saveReaksToFile(engzee.rpeaks,"rpeaks.dat");
-	fclose(finput);
+    const double fs = 250;
 
-	fclose(f);
+    EngzeeDetector detector(fs);
+    std::vector<int> qrs = detector.OfflineDetect(unfiltered_ecg);
+
+    std::cout << "QRS detected at index:";
+    for (int index : qrs) {
+        std::cout << " " << index;
+    }
+    std::cout << std::endl;
+
+    return 0;
 }

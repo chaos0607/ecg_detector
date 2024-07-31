@@ -11,7 +11,7 @@ endforeach()
 target_sources(mwa_test PRIVATE ../src/algorithms/mwa.cpp)
 target_sources(twoaverage_test PRIVATE ../src/algorithms/mwa.cpp ../src/detectors/TwoAverage.cpp)
 target_sources(wqrs_test PRIVATE ../src/algorithms/mwa.cpp ../src/detectors/wqrs.cpp)
-target_sources(demo PRIVATE ../src/utils.cpp)
+target_sources(engzee_test PRIVATE ../src/detectors/engzee.cpp)
 
 file(GLOB_RECURSE SRC_FILES "../src/**/*.cpp")
 target_sources(detect_on_test_dataset PRIVATE ${SRC_FILES} ../src/EcgDetector.cpp)

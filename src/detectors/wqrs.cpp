@@ -34,7 +34,7 @@ std::vector<int> wqrsDetector::threshold(const std::vector<double>& x, double fs
     return peaks;
 }
 
-std::vector<int> wqrsDetector::detect(const std::vector<double>& unfiltered_ecg) {
+std::vector<int> wqrsDetector::OfflineDetect(const std::vector<double>& unfiltered_ecg) {
     
     Iir::Butterworth::LowPass<2> iirlowpass ;
 	iirlowpass.setup(fs, 15);

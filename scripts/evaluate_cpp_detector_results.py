@@ -117,9 +117,11 @@ def evaluate_detector(detector):
                 # but centres the detection point for finding the nearest annotated match
                 # It may/will be different for different subjects and experiments
                 if detectorname == "two_average_detector":
-                    rpeaks_file = "rpeaks_twoaveragerpeaks_wqrs.tsv"
+                    rpeaks_file = "rpeaks_twoaverage.tsv"
                 elif detectorname == "wqrs_detector":
                     rpeaks_file = "rpeaks_wqrs.tsv"
+                elif detectorname == "engzee_detector":
+                    rpeaks_file = "rpeaks_engzee.tsv"
 
                 rpeaks_dir = "/home/cc/work/project/code/my-ecg-detector-test-data/experiment_data"
                 file_path= rpeaks_dir + "/" + ("subject_%02d" % subject_number) + "/"  + experiment + "/"+ rpeaks_file
@@ -156,16 +158,10 @@ def evaluate_detector(detector):
 
 
 def main():
-        start_time = time.time()
         evaluate_detector(detectors.detector_list[0])
-        end_time = time.time()
-        detect_time1 = end_time - start_time;
-        start_time = time.time()
         evaluate_detector(detectors.detector_list[7])
-        end_time = time.time()
-        detect_time2 = end_time - start_time;
-        print("Two average Detector took: ", detect_time1)
-        print("WQRS Detector took: ", detect_time2)
+        evaluate_detector(detectors.detector_list[3])
+
 
 
 if __name__ == '__main__':

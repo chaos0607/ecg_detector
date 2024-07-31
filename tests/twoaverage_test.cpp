@@ -15,7 +15,7 @@ int main() {
     const float fs = 250;
 
     TwoAverageDetector detector(fs);
-    std::vector<int> qrs = detector.detect(unfiltered_ecg);
+    std::vector<int> qrs = detector.OfflineDetect(unfiltered_ecg);
 
     std::cout << "QRS detected at index:";
     for (int index : qrs) {

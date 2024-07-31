@@ -4,6 +4,7 @@
 #include "detectors/base.h"
 #include "detectors/TwoAverage.h"
 #include "detectors/wqrs.h"
+#include "detectors/engzee.h"
 #include <memory>
 
 class DetectorFactory {
@@ -14,8 +15,11 @@ public:
                 return std::make_unique<TwoAverageDetector>(fs);
             case 1:
                 return std::make_unique<wqrsDetector>(fs);
+            case 2:
+                return std::make_unique<EngzeeDetector>(fs);
             default:
-                return nullptr;
+                std::cerr << "Error: Unknown detector type!" << std::endl;
+                std::exit(EXIT_FAILURE);
         }
     }
 };

@@ -7,7 +7,7 @@
 int main(int argc, char *argv[]) {
     if (argc < 4) {
         std::cerr << "Usage: " << argv[0] << " <sample file> <detector type> <sample frequency>" << std::endl;
-        std::cerr << "detector type: 0 for TwoAverage, 1 for Wqrs" << std::endl;
+        std::cerr << "detector type: 0 for TwoAverage, 1 for Wqrs, 2 for engzee" << std::endl;
         return EXIT_FAILURE;
     }
 
