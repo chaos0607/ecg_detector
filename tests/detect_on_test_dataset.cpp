@@ -52,6 +52,6 @@ int main(int argc, char *argv[]) {
     std::string directoryPath = input_file;
     processECGFilesInDirectory(directoryPath,0,fs); // 0 for TwoAverage
     processECGFilesInDirectory(directoryPath,1,fs); // 1 for Wqrs
-    //processECGFilesInDirectory(directoryPath,2,fs); // 2 for engzee
+    processECGFilesInDirectory(directoryPath,2,fs); // 2 for engzee
     return 0;
 }

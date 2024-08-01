@@ -141,6 +141,14 @@ def evaluate_detector(detector):
                     detected_peaks = np.loadtxt(file_path, delimiter="\n") # load detected peaks from file
                     detected_peaks_save[record_lead][experiment][subject_number] = detected_peaks
 
+                    try:
+                        if len(detected_peaks) < 2:
+                            print("very few peaks for subject %d, %s exercise" % (subject_number, experiment))
+                            continue
+                    except TypeError:
+                        print(f"Error: detected_peaks is not a sized object for subject {subject_number}, {experiment} exercise")
+                        continue
+
                     jf_result = jf_analysis.evaluate(detected_peaks, data_anno, fs, len(data)) # perform interval based analysis
                     jf_subjects.append(jf_result)
                     
@@ -171,7 +179,7 @@ def evaluate_detector(detector):
 def main():
         evaluate_detector(detectors.detector_list[0])
         evaluate_detector(detectors.detector_list[7])
-        #valuate_detector(detectors.detector_list[3])
+        evaluate_detector(detectors.detector_list[3])
 
 
 

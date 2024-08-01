@@ -30,6 +30,7 @@
  * @param samplingrate The sampling rate in Hz in the region of 250Hz..300Hz.
  */
     EngzeeDetector::EngzeeDetector(double samplingFrequency) : BaseDetector(samplingFrequency) {
+        cutoff = (int)(0.2 * samplingFrequency);;
         ms200 = (int)(0.2 * samplingFrequency);
         ms1200 = (int)(1.2 * samplingFrequency);
         ms160 = (int)(0.16 * samplingFrequency);
@@ -42,7 +43,14 @@
     }
 
     void EngzeeDetector::detect(float v) {
-        const float filtered = lowhighpass.filter(v);
+        float filtered = lowhighpass.filter(v);
+
+        //avoid the initial transient
+        if (cutoff > 0) {
+            cutoff--;
+            filtered = 0;
+        }
+
         past.push(filtered);
         // threshold M
         if (s2ctr > 0) {

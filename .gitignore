@@ -18,3 +18,4 @@ CMakeCache.txt
 CMakeFiles/
 cmake_install.cmake
 Makefile
+scripts/__pycache__

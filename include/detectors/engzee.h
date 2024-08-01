@@ -44,6 +44,7 @@ private:
 
     int current_rpeak = 0;
     std::vector<int> rpeaks;
+    int cutoff;
     int ms200;
     int ms1200;
     int ms160;

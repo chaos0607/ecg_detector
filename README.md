@@ -7,7 +7,7 @@ Elgendi, Mohamed & Jonkman, Mirjam & De Boer, Friso. (2010).Frequency Bands Effe
 **WQRS detector:**
 W Zong, GB Moody, D Jiang  A Robust Open-source Algorithm to Detect Onset and Duration of QRS Complexes In: 2003 IEEE
 
-**Engzee detector:** (**unavailable at present, have some problems**)
+**Engzee detector:**
 W. Engelse and C. Zeelenberg, “A single scan algorithm for QRS detection and feature extraction”, IEEE Comp. in Cardiology, vol. 6, pp. 37-42, 1979 with modifications A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, “Real Time Electrocardiogram Segmentation for Finger Based ECG Biometrics”, BIOSIGNALS 2012, pp. 49-54, 2012.
 
 Based on the Python version of the EngZee detector (https://github.com/berndporr/py-ecg-detectors) initially written by Luis Howell.
@@ -59,7 +59,7 @@ use the **EcgDetector** program
 
 ```
 ./EcgDetector <sample file> <detector type> <sample frequency>
-detector type: 0 for TwoAverage, 1 for Wqrs
+detector type: 0 for TwoAverage, 1 for Wqrs, 2 for engzee
 ```
 
 for-example
@@ -97,15 +97,15 @@ python scripts/evaluate_cpp_detector_results.py $(dataset_dir)
 ```
 ./scripts/jf_stats_detectors.py
 ```
-![evaluate example](scripts/cpp_cs_v0.1.png)
+![evaluate example](scripts/cpp_cs_v0.2.png)
 
 If you have the python detector installed then you can compare its the python version
 
 
 ## Todo
-Add online detectors to process real tiem data steam
+Add online detectors to process real time data steam
 
-fix the naf result of engzee detector under some circumstances
+improve the robust of engzee detectors
 
 # Credit
 
