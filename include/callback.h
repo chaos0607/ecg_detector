@@ -8,13 +8,14 @@
  * needs to create an instance of this interface
  * and register it with the detecter class.
  */
-struct HRCallback {
+class HRCallback {
     /**
      * @brief Callback which is called whenever the heartrate has been determined
      * 
      * @param hr The heartrate in beats per minute.
      */
-    virtual void hasHR(float hr) = 0;
+    public:
+     virtual void hasHR(float hr) = 0;
 };
 
 #endif // CALLBACK_H

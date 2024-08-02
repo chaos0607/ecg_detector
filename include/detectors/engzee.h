@@ -20,6 +20,8 @@
 #include <vector>
 #include "algorithms/fir.h"
 #include "base.h"
+#include "callback.h"
+#include "iir/Butterworth.h"
 
 /**
  * @brief The EngZee heartrate detector class
@@ -36,6 +38,7 @@ public:
     EngzeeDetector(double samplingFrequency);
     
     std::vector<int> OfflineDetect(const std::vector<double>& unfiltered_ecg) override;
+    float OnlineDetect(const double unfiltered_ecg);
 
 private:
     Fir lowhighpass;
@@ -60,8 +63,9 @@ private:
     int counter = 0;
     int lastRelativeQRStimestamp = 0;
     bool firstDetection = true;
+    Iir::Butterworth::BandStop<2> iirnotch;
 
-    void detect(float v);
+    float detect(float v, bool online);
 };
 
 #endif // ENGZEE_H

@@ -29,7 +29,7 @@
  * 
  * @param samplingrate The sampling rate in Hz in the region of 250Hz..300Hz.
  */
-    EngzeeDetector::EngzeeDetector(double samplingFrequency) : BaseDetector(samplingFrequency) {
+    EngzeeDetector::EngzeeDetector(double samplingFrequency) : BaseDetector(samplingFrequency)  {
         cutoff = (int)(0.2 * samplingFrequency);;
         ms200 = (int)(0.2 * samplingFrequency);
         ms1200 = (int)(1.2 * samplingFrequency);
@@ -40,11 +40,12 @@
         lowhighpass.init({1, 4, 6, 4, 1, -1, -4, -6, -4, -1});
         MM.init(5);
         rpeaks.reserve(1000);
+        iirnotch.setup(samplingFrequency, 50, 2);
     }
 
-    void EngzeeDetector::detect(float v) {
+    float EngzeeDetector::detect(float v, bool online = false) {
+        float heartRate = 0;
         float filtered = lowhighpass.filter(v);
-
         //avoid the initial transient
         if (cutoff > 0) {
             cutoff--;
@@ -124,6 +125,13 @@
                 }
             }
             if (!firstDetection) {
+
+                if (online){
+                        float dSamples = (float)(lastRelativeQRStimestamp - index);
+                        heartRate = 60*(float)samplingFrequency / dSamples;
+                } else {
+                    rpeaks.push_back(currentQRStimestamp);
+                }
                 //unused code to calculate the heartrate
                 //float dSamples = (float)(lastRelativeQRStimestamp - index); 
                 
@@ -139,18 +147,23 @@
         }
 
         lastThresQRStimestamp++;
+        if (!online) {
+            currentQRStimestamp++;
+        }
         lastRelativeQRStimestamp++;
+        return heartRate;
     }
 
     std::vector<int> EngzeeDetector::OfflineDetect(const std::vector<double>& unfiltered_ecg) {
-
-        Iir::Butterworth::BandStop<2> iirnotch;
-	    iirnotch.setup(samplingFrequency,50,2);
-
-
         for (auto v : unfiltered_ecg) {
             const double a = iirnotch.filter(v);
             detect(static_cast<float>(a));
         }
         return rpeaks;
+    }
+
+    float EngzeeDetector::OnlineDetect(const double unfiltered_ecg) {
+        const double filtered_ecg = iirnotch.filter(unfiltered_ecg);
+        float heartrate = detect(static_cast<float>(filtered_ecg), true);
+        return heartrate;
     }

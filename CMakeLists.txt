@@ -28,10 +28,31 @@ file(GLOB_RECURSE IIR_SOURCES ${PROJECT_SOURCE_DIR}/libs/iir/*.cpp)
 file(GLOB_RECURSE IIR_HEADERS ${PROJECT_SOURCE_DIR}/libs/iir/*.h ${PROJECT_SOURCE_DIR}/libs/*.h)
 add_library(iir STATIC ${IIR_SOURCES} ${IIR_HEADERS})
 
-file(GLOB_RECURSE SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
+find_package(FLTK REQUIRED)
+include_directories(${FLTK_INCLUDE_DIR})
 
-add_executable(EcgDetector ${SOURCES})
-target_link_libraries(EcgDetector iir)
+file(GLOB_RECURSE SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
+set(MAIN_FILES
+    ${PROJECT_SOURCE_DIR}/src/OfflineDetector.cpp
+    ${PROJECT_SOURCE_DIR}/src/OnlineDetector.cpp
+)
+list(REMOVE_ITEM SOURCES ${MAIN_FILES})
+
+set(ONLINE_SOURCES
+    ${PROJECT_SOURCE_DIR}/src/OnlineDetector.cpp
+    ${SOURCES}
+)
+set(OFFLINE_SOURCES
+    ${PROJECT_SOURCE_DIR}/src/OfflineDetector.cpp
+    ${SOURCES}
+)
+
+add_executable(OnlineEcgDetector ${ONLINE_SOURCES})
+add_executable(OfflineEcgDetector ${OFFLINE_SOURCES})
+
+target_link_libraries(OfflineEcgDetector iir ${FLTK_LIBRARIES})
+target_link_libraries(OnlineEcgDetector iir ${FLTK_LIBRARIES})
+
 add_definitions(-DPROJECT_ROOT="${PROJECT_ROOT}")
 
 add_subdirectory(tests)

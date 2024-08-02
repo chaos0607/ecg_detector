@@ -32,3 +32,4 @@ std::vector<int> EcgDetector::offlinedetectFromFile(const std::string& filename,
     std::vector<int> rpeaks = offlinedetect(unfiltered_ecg, detector_type, fs);
     return rpeaks;
 }
+
