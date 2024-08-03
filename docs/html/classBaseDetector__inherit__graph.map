@@ -1,0 +1,6 @@
+<map id="BaseDetector" name="BaseDetector">
+<area shape="rect" id="node1" title="An abstract base class for ECG signal detection." alt="" coords="178,5,289,32"/>
+<area shape="rect" id="node2" href="$classEngzeeDetector.html" title="The Engzee heart rate detector class." alt="" coords="5,80,131,107"/>
+<area shape="rect" id="node3" href="$classTwoAverageDetector.html" title="A QRS detector using the two average method." alt="" coords="155,80,311,107"/>
+<area shape="rect" id="node4" href="$classwqrsDetector.html" title="A QRS detector implementing the length transform method." alt="" coords="336,80,445,107"/>
+</map>

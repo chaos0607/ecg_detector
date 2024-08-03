@@ -1,0 +1,4 @@
+<map id="wqrsDetector" name="wqrsDetector">
+<area shape="rect" id="node1" title="A QRS detector implementing the length transform method." alt="" coords="6,80,115,107"/>
+<area shape="rect" id="node2" href="$classBaseDetector.html" title="An abstract base class for ECG signal detection." alt="" coords="5,5,116,32"/>
+</map>

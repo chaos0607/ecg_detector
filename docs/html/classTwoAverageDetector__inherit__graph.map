@@ -1,0 +1,4 @@
+<map id="TwoAverageDetector" name="TwoAverageDetector">
+<area shape="rect" id="node1" title="A QRS detector using the two average method." alt="" coords="5,80,161,107"/>
+<area shape="rect" id="node2" href="$classBaseDetector.html" title="An abstract base class for ECG signal detection." alt="" coords="28,5,139,32"/>
+</map>

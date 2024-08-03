@@ -24,29 +24,48 @@
 #include "iir/Butterworth.h"
 
 /**
- * @brief The EngZee heartrate detector class
- * This class performs continuous heartrate detection on a stream of
- * ECG data.
+ * @class EngzeeDetector
+ * @brief The Engzee heart rate detector class.
+ * 
+ * This class performs continuous heart rate detection on a stream of
+ * ECG data using a combination of FIR and IIR filters.
  */
 class EngzeeDetector : public BaseDetector {
 public:
     /**
-     * @brief Construct a new Engzee object
+     * @brief Construct a new EngzeeDetector object.
      * 
-     * @param samplingrate The sampling rate in Hz in the region of 250Hz..300Hz.
+     * @param samplingFrequency The sampling rate in Hz, typically in the range of 250Hz to 300Hz.
      */
     EngzeeDetector(double samplingFrequency);
     
+    /**
+     * @brief Perform offline QRS detection on unfiltered ECG data.
+     * 
+     * This method processes the entire ECG signal and detects R-peaks.
+     * 
+     * @param unfiltered_ecg A vector containing the unfiltered ECG signal data.
+     * @return A vector of indices representing detected R-peaks in the ECG signal.
+     */
     std::vector<int> OfflineDetect(const std::vector<double>& unfiltered_ecg) override;
+
+    /**
+     * @brief Perform online QRS detection on a single ECG sample.
+     * 
+     * This method processes ECG data in real-time, detecting R-peaks from a continuous input.
+     * 
+     * @param unfiltered_ecg A single sample of unfiltered ECG data.
+     * @return A float indicating detection status or amplitude of detected R-peak.
+     */
     float OnlineDetect(const double unfiltered_ecg);
 
 private:
-    Fir lowhighpass;
-    Fir MM;
-    Fir past;
+    Fir lowhighpass; ///< Low-high pass filter for signal preprocessing.
+    Fir MM; ///< Moving mean filter for baseline correction.
+    Fir past; ///< FIR filter for past signal data.
 
-    int current_rpeak = 0;
-    std::vector<int> rpeaks;
+    int current_rpeak = 0; ///< Index of the current R-peak.
+    std::vector<int> rpeaks; ///< Vector storing indices of detected R-peaks.
     int cutoff;
     int ms200;
     int ms1200;
@@ -63,8 +82,15 @@ private:
     int counter = 0;
     int lastRelativeQRStimestamp = 0;
     bool firstDetection = true;
-    Iir::Butterworth::BandStop<2> iirnotch;
+    Iir::Butterworth::BandStop<2> iirnotch; ///< Bandstop IIR filter to remove powerline interference.
 
+    /**
+     * @brief Perform QRS detection on a given sample.
+     * 
+     * @param v The input sample value.
+     * @param online Flag indicating if detection is in online mode.
+     * @return A float indicating detection status or feature.
+     */
     float detect(float v, bool online);
 };
 
