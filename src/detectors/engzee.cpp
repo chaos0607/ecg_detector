@@ -129,8 +129,6 @@
                 if (online){
                         float dSamples = (float)(lastRelativeQRStimestamp - index);
                         heartRate = 60*(float)samplingFrequency / dSamples;
-                } else {
-                    rpeaks.push_back(currentQRStimestamp);
                 }
                 //unused code to calculate the heartrate
                 //float dSamples = (float)(lastRelativeQRStimestamp - index); 

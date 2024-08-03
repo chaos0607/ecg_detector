@@ -43,7 +43,6 @@ std::vector<int> TwoAverageDetector::OfflineDetect(const std::vector<double>& un
     // use to decrease the Phase Delay of the signal
     //decreaseDelayReverseFiltering(filtered_ecg, iirbandpass);
     decreaseDelayAddCompensation(filtered_ecg, 16);
-    //saveEcgDataToFile(filtered_ecg, "filtered_ecg.txt");
 
     std::vector<double> abs_filtered_ecg(filtered_ecg.size());
     std::transform(filtered_ecg.begin(), filtered_ecg.end(), abs_filtered_ecg.begin(), [](double val) {
@@ -78,11 +77,9 @@ std::vector<int> TwoAverageDetector::OfflineDetect(const std::vector<double>& un
                 int detection = static_cast<int>(std::distance(filtered_ecg.begin(), std::max_element(filtered_ecg.begin() + start, filtered_ecg.begin() + end + 1)));
                 if (!QRS.empty()) {
                     if (detection - QRS.back() > static_cast<int>(0.3 * samplingFrequency)) {
-                        //std::cout << "QRS detected at index: " << detection << std::endl;
                         QRS.push_back(detection);
                     }
                 } else {
-                    //std::cout << "QRS detected at index: " << detection << std::endl;
                     QRS.push_back(detection);
                 }
             }
