@@ -16,3 +16,4 @@ target_sources(engzee_test PRIVATE ../src/detectors/engzee.cpp)
 
 file(GLOB_RECURSE SRC_FILES "../src/**/*.cpp")
 target_sources(detect_on_test_dataset PRIVATE ${SRC_FILES} ../src/EcgDetector.cpp)
+target_sources(detect_on_MIT-BIH PRIVATE ${SRC_FILES} ../src/EcgDetector.cpp)
